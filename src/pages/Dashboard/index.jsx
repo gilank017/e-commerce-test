@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import AuthLayout from '../../layout/AuthLayout'
 import { getListProvider } from '../../services/provider'
+import { Text } from '@mantine/core'
 
 const DashboardPage = () => {
 
@@ -16,7 +17,12 @@ const DashboardPage = () => {
   }, [])
   return (
     <AuthLayout>
-      <div>DashboardPage</div>
+      <Text
+        fz='lg'
+        fw={600}
+      >
+        Welcome Back, User
+      </Text>
     </AuthLayout>
   )
 }
