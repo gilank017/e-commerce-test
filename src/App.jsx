@@ -2,21 +2,39 @@ import React, { useEffect } from "react"
 import { MantineProvider } from "@mantine/core"
 import { Notifications } from "@mantine/notifications"
 import { ModalsProvider } from "@mantine/modals"
-import { Routes, Route, useLocation, Navigate } from "react-router"
+import { Routes, Route, useLocation, Navigate, useNavigate } from "react-router"
 import { publicRoute, authRoute } from "./routes"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { getStatusLogin } from "./store/auth"
 
 import '@mantine/core/styles.css'
 import "@mantine/notifications/styles.css"
 
 export default function App() {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const { pathname } = useLocation()
-  const { isLogin } = useSelector((state) => state.auth)
+  const { isLoadingAuth, isLogin } = useSelector((state) => state.auth)
 
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
+
+  useEffect(() => {
+    dispatch(getStatusLogin())
+  }, [dispatch])
+
+  useEffect(() => {
+    if (!isLoadingAuth) {
+      if (isLogin) {
+        navigate(pathname !== '/login' ? pathname : '/dashboard', { replace: true })
+      } else {
+        navigate('/login', { replace: true })
+      }
+    }
+    // eslint-disable-next-line
+  }, [isLoadingAuth, isLogin, pathname])
 
   const getRoute = (routes) => routes.map((page) => {
     if (page.children.length === 0) {

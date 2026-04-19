@@ -20,8 +20,8 @@ const LoginPage = () => {
     await dispatch(updateDataLogin({
       isLoadingAuth: false, 
       isLogin: true,
-      email: value.email
     }))
+    localStorage.setItem('status-login', 'yes')
     navigate('/dashboard')
     setLoadingForm(false)
   }
