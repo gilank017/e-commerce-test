@@ -8,3 +8,12 @@ export const getListHistoryPayment = async () => {
     throw err
   }
 }
+
+export const addTransaction = async (data) => {
+  try {
+    const res = await api.post('/transactions', data)
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}

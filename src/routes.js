@@ -3,6 +3,7 @@ import LoginPage from './pages/Login'
 import DashboardPage from './pages/Dashboard'
 import QuotaPage from './pages/Quota'
 import HistoryPaymentPage from './pages/HistoryPayment'
+import CheckoutPage from './pages/Checkout'
 
 import {
   IconGauge,
@@ -43,6 +44,14 @@ const authRoute = [
     children: [],
     component: <HistoryPaymentPage/>,
     icon: IconCalendarDollar
+  },
+  {
+    name: 'checkout-page',
+    label: 'Checkout',
+    route: '/checkout',
+    children: [],
+    component: <CheckoutPage/>,
+    icon: null
   }
 ]
 

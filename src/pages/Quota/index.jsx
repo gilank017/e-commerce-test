@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import AuthLayout from '../../layout/AuthLayout'
-import { Box, Text, TextInput, Flex, Select, Grid, Paper } from '@mantine/core'
+import { Box, Text, TextInput, Flex, Select, Grid, Paper, NumberFormatter, Button, Modal } from '@mantine/core'
 import { getListPackages } from '../../services/package'
 import { getListProvider } from '../../services/provider'
 import { useDebouncedCallback, useViewportSize } from '@mantine/hooks'
 import LoadingData from '../../components/ui/LoadingData'
 import NoData from '../../components/ui/NoData'
+import InfoQuota from '../../components/pages/Quota/InfoQuota'
 
 const defaultParams = {
   provider: null,
@@ -19,6 +20,8 @@ const QuotaPage = () => {
   const [packagesList, setPackagesList] = useState([])
   const [providerList, setProviderList] = useState([])
   const [params, setParams] = useState(defaultParams)
+  const [openModalDetail, setOpenModalDetail] = useState(false)
+  const [detailData, setDetailData] = useState(null)
 
   const handleGetListPackages = useDebouncedCallback(async () => {
     setLoadingData(true)
@@ -69,12 +72,28 @@ const QuotaPage = () => {
     }))
   }
 
+  const onCloseModalDetail = () => {
+    setOpenModalDetail(false)
+    setDetailData(null)
+  }
+
   const mappingData = (data) => {
     const remap = data.map((val, index) => {
       return (
         <Grid.Col key={index} span={{ base: 6, lg: 4 }}>
-          <Paper shadow="sm" radius="md" withBorder p="xl">
-            {val.name}
+          <Paper shadow="sm" radius="md" withBorder p="md">
+            <Text fz={width > 768 ? 14 : 12} fw={600}>
+              {val.name}
+            </Text>
+            <Text fz={width > 768 ? 12 : 10} fw={500} tt='capitalize'>
+              {val.provider}
+            </Text>
+            <Flex mt={20} justify='space-between' align='center'>
+              <Text fw='bold'>
+                <NumberFormatter value={val.price || 0} prefix='Rp ' thousandSeparator />
+              </Text>
+              <Button size='xs' radius='sm' onClick={() => [setOpenModalDetail(true), setDetailData(val)]}>Detail</Button>
+            </Flex>
           </Paper>
         </Grid.Col>
       )
@@ -132,6 +151,9 @@ const QuotaPage = () => {
       <Box my={20}>
         {loadingData ? <LoadingData /> : loadData()}
       </Box>
+      <Modal opened={openModalDetail} onClose={onCloseModalDetail} centered closeOnClickOutside={false} size='lg' title={<Text fw='Bold'>Information Package</Text>} withCloseButton={false}>
+        <InfoQuota data={detailData} onCloseInfo={onCloseModalDetail} />
+      </Modal>
     </AuthLayout>
   )
 }
