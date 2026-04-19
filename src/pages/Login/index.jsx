@@ -1,15 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, Center, Paper, Text, TextInput, PasswordInput, Button } from '@mantine/core'
 import { useViewportSize } from '@mantine/hooks'
 import { useLoginForm } from './schema/form'
+import { useDispatch } from 'react-redux'
+import { updateDataLogin } from '../../store/auth'
+import { useNavigate } from 'react-router'
 
 const LoginPage = () => {
+  const navigate = useNavigate()
+  const  dispatch = useDispatch()
   const { width, height } = useViewportSize()
+
+  const [loadingForm, setLoadingForm] = useState(false)
 
   const form = useLoginForm()
 
   const handleLogin = async (value) => {
-    console.log('login', value)
+    setLoadingForm(true)
+    await dispatch(updateDataLogin({
+      isLoadingAuth: false, 
+      isLogin: true,
+      email: value.email
+    }))
+    navigate('/dashboard')
+    setLoadingForm(false)
   }
 
   return (
@@ -46,6 +60,7 @@ const LoginPage = () => {
             mt={40}
             size='xs'
             fullWidth
+            loading={loadingForm}
             onClick={form.onSubmit((value) => {
               handleLogin(value)
             }, (error) => {

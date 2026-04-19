@@ -5,11 +5,13 @@ const authData = createSlice({
   initialState: {
     isLoadingAuth: false,
     isLogin: false,
+    email: ''
   },
   reducers: {
     updateDataLogin: (state, action) => {
       state.isLoadingAuth = action.payload.isLoadingAuth
       state.isLogin = action.payload.isLogin
+      state.email = action.payload.email
     }
   }
 })

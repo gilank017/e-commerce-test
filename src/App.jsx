@@ -2,8 +2,8 @@ import React, { useEffect } from "react"
 import { MantineProvider } from "@mantine/core"
 import { Notifications } from "@mantine/notifications"
 import { ModalsProvider } from "@mantine/modals"
-import { Routes, Route, useLocation, useNavigate, Navigate } from "react-router"
-import { publicRoute } from "./routes"
+import { Routes, Route, useLocation, Navigate } from "react-router"
+import { publicRoute, authRoute } from "./routes"
 import { useSelector } from "react-redux"
 
 import '@mantine/core/styles.css'
@@ -76,6 +76,7 @@ export default function App() {
             element={isLogin ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />}
           />
           {getRoute(publicRoute)}
+          {getRoute(authRoute)}
         </Routes>
       </ModalsProvider>
     </MantineProvider>
